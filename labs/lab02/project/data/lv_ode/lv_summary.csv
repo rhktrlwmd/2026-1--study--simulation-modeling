@@ -1,0 +1,8 @@
+metric,value
+x_star,30.0
+y_star,5.0
+period_theory,36.275987284684355
+prey_peak_time,33.7
+predator_peak_time,40.6
+phase_lag,6.899999999999999
+invariant_drift,1.2698360141172316e-9

@@ -1,0 +1,6 @@
+.DS_Store
+.julia/
+.jupyter/
+.quarto/
+**/.ipynb_checkpoints/
+**/*_files/
