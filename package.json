@@ -1,0 +1,14 @@
+{
+  "name": "simulation-modeling",
+  "version": "1.0.0",
+  "description": "Имитационное моделирование",
+  "main": "index.js",
+  "repository": "git@github.com:rhktrlwmd/2026-1--study--simulation-modeling.git",
+  "author": "Исаева Зарина Исмайилбековна <rhktrlwmd@users.noreply.github.com>",
+  "license": "CC-BY-4.0",
+    "config": {
+	"commitizen": {
+	    "path": "cz-customizable"
+	}
+    }
+}
