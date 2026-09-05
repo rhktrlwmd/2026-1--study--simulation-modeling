@@ -1,0 +1,63 @@
+:root {
+  --r-background-color: #f7f9fc;
+  --r-main-color: #203047;
+  --r-heading-color: #0b5b8e;
+  --r-link-color: #087e8b;
+  --r-main-font: "Avenir Next", Arial, sans-serif;
+  --r-heading-font: "Avenir Next", Arial, sans-serif;
+}
+
+.reveal .slides { text-align: left; }
+.reveal .slides section { padding: 0 10px; }
+.reveal h1, .reveal h2 {
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-weight: 650;
+}
+.reveal h1 {
+  color: #ffffff;
+  background: linear-gradient(120deg, #0b5b8e, #087e8b);
+  padding: 0.52em 0.7em;
+  border-radius: 16px;
+}
+.reveal h2 {
+  color: #0b5b8e;
+  margin: 0 0 0.55em;
+  padding-bottom: 0.18em;
+  border-bottom: 4px solid #75b798;
+}
+.reveal strong { color: #087e8b; }
+.reveal p, .reveal li { line-height: 1.28; }
+.reveal ul, .reveal ol { margin-left: 1.1em; }
+.reveal table {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  font-size: 0.78em;
+}
+.reveal table th { color: #fff; background: #0b5b8e; }
+.reveal table td { background: #fff; }
+.reveal table tr:nth-child(even) td { background: #eaf3f6; }
+.reveal img {
+  border: 1px solid #c5d5df;
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(32, 48, 71, 0.12);
+  background: #fff;
+  padding: 4px;
+}
+.reveal pre {
+  border-radius: 12px;
+  box-shadow: 0 5px 18px rgba(32, 48, 71, 0.12);
+}
+.reveal .slide-logo {
+  display: block !important;
+  max-height: 52px !important;
+  right: 26px !important;
+  bottom: 18px !important;
+  background: #fff;
+  padding: 5px;
+  border-radius: 8px;
+}
+.reveal .slide-number { color: #0b5b8e; }
+.reveal .progress { color: #75b798; }
