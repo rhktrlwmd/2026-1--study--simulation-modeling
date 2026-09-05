@@ -12,7 +12,14 @@ all: docx pdf verify
 includes:
 	@mkdir -p _includes
 	@for name in $(SCENARIOS); do \
-		sed 's/^```{julia}/```julia/' ../project/markdown/$$name/$$name.qmd > _includes/$$name.qmd; \
+		sed 's/^```{julia}/```julia/' ../project/markdown/$$name/$$name.qmd | \
+		awk 'BEGIN { code = 0 } \
+		     /^```/ { code = !code; print; next } \
+		     !code && /^#### / { sub(/^#### /, "###### "); print; next } \
+		     !code && /^### /  { sub(/^### /,  "##### "); print; next } \
+		     !code && /^## /   { sub(/^## /,   "#### "); print; next } \
+		     !code && /^# /    { sub(/^# /,    "### "); print; next } \
+		     { print }' > _includes/$$name.qmd; \
 	done
 	@{ echo '```julia'; cat ../project/src/BasicModels.jl; echo '```'; } > _includes/BasicModels.jl.md
 	@{ echo '```julia'; cat ../project/scripts/setup_environment.jl; echo '```'; } > _includes/setup_environment.jl.md
