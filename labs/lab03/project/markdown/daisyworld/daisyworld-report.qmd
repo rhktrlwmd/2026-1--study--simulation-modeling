@@ -1,0 +1,38 @@
+### Daisyworld: пространственная эволюция
+
+Базовый опыт воспроизводит состояния сетки 30×30 на шагах 0, 5 и 45.
+Чёрные маргаритки поглощают больше излучения, белые отражают его.
+
+#### Подготовка модели
+
+```julia
+using DrWatson
+@quickactivate "DaisyworldLab"
+include(srcdir("experiment_tools.jl"))
+```
+
+#### Снимки заданных моментов
+
+```julia
+model = create_world(seed=165)
+rows = NamedTuple[]
+for target in (0, 5, 45)
+    advance!(model, target - model.tick)
+    push!(rows, observe(model))
+    fig = snapshot_figure(model)
+    save_figure(
+        fig, "daisyworld", "step-$(lpad(target, 3, '0')).png";
+        report_name="baseline-step-$(lpad(target, 3, '0')).png",
+    )
+    display(fig)
+end
+```
+
+#### Таблица наблюдений
+
+```julia
+summary = DataFrame(rows)
+CSV.write(scenario_data("daisyworld", "snapshots.csv"), summary)
+summary
+```
+

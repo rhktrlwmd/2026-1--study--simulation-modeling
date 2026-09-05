@@ -1,0 +1,37 @@
+# # Daisyworld: анимация 60 состояний
+#
+# Анимация показывает первые 60 шагов базового опыта при фиксированном seed.
+
+# ## Подготовка модели и сцены
+using DrWatson
+@quickactivate "DaisyworldLab"
+include(srcdir("experiment_tools.jl"))
+
+model = create_world(seed=165)
+fig = Figure(size=(880, 710))
+ax = Axis(fig[1, 1], title="Daisyworld", xlabel="x", ylabel="y", aspect=1)
+temperatures = Observable(copy(model.temperature))
+black_points = Observable(Point2f[])
+white_points = Observable(Point2f[])
+heat = heatmap!(ax, temperatures; colormap=:thermal, colorrange=(-20, 60))
+scatter!(ax, black_points; color=:black, markersize=8)
+scatter!(ax, white_points; color=:white, strokecolor=:black, strokewidth=0.5, markersize=8)
+Colorbar(fig[1, 2], heat; label="Температура, °C")
+
+# ## Запись последовательности
+rows = NamedTuple[]
+record(fig, scenario_plot("daisyworld-animate", "daisyworld-evolution.mp4"), 0:59; framerate=10) do frame
+    frame > 0 && advance!(model)
+    temperatures[] = copy(model.temperature)
+    black_points[] = [Point2f(a.pos...) for a in allagents(model) if a.breed == :black]
+    white_points[] = [Point2f(a.pos...) for a in allagents(model) if a.breed == :white]
+    ax.title = "Daisyworld, t=$(model.tick)"
+    push!(rows, observe(model))
+end
+
+# ## Данные кадров и финальное состояние
+frame_data = DataFrame(rows)
+CSV.write(scenario_data("daisyworld-animate", "frames.csv"), frame_data)
+save(report_figure("animation-final-state.png"), fig)
+display(fig)
+frame_data[1:10:end, :]

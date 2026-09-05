@@ -1,0 +1,45 @@
+# Daisyworld: численность при разных параметрах
+
+Для четырёх сочетаний рассчитываются независимые траектории длиной 1000 шагов.
+
+## Параметрические прогоны
+
+```{julia}
+using DrWatson
+@quickactivate "DaisyworldLab"
+include(srcdir("experiment_tools.jl"))
+
+summary_rows = NamedTuple[]
+comparison = Figure(size=(1200, 900))
+for (run, parameters) in enumerate(parameter_sets())
+    model = create_world(; parameters...)
+    trajectory = history_frame(model, 1000)
+    save_history(trajectory, "daisyworld-count__param";
+                 filename="trajectory-run-$(run).csv")
+    push!(summary_rows, (
+        run=run, max_age=parameters[:max_age], init_white=parameters[:init_white],
+        final_black=last(trajectory.black), final_white=last(trajectory.white),
+        peak_black=maximum(trajectory.black), peak_white=maximum(trajectory.white),
+        extinction_step=extinction_time(trajectory),
+        mean_regulation_error=mean(trajectory.regulation_error),
+    ))
+    ax = Axis(comparison[(run - 1) ÷ 2 + 1, (run - 1) % 2 + 1],
+              title="Возраст $(parameters[:max_age]), белые $(parameters[:init_white])",
+              xlabel="Шаг", ylabel="Число растений")
+    lines!(ax, trajectory.time, trajectory.black; color=:black, label="Чёрные")
+    lines!(ax, trajectory.time, trajectory.white; color=:orange, label="Белые")
+    run == 1 && axislegend(ax; position=:rt)
+end
+```
+
+## Итоговые показатели
+
+```{julia}
+save_figure(comparison, "daisyworld-count__param", "population-grid.png";
+            report_name="parameter-population-comparison.png")
+display(comparison)
+summary = DataFrame(summary_rows)
+CSV.write(scenario_data("daisyworld-count__param", "summary.csv"), summary)
+summary
+```
+

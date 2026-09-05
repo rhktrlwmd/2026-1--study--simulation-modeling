@@ -1,0 +1,41 @@
+# # Daisyworld: пространственные состояния для набора параметров
+#
+# Исследуются четыре сочетания максимального возраста 25/40 и начальной доли
+# белых маргариток 0.2/0.8 при остальных параметрах из базового опыта.
+
+# ## План эксперимента
+using DrWatson
+@quickactivate "DaisyworldLab"
+include(srcdir("experiment_tools.jl"))
+
+rows = NamedTuple[]
+final_fig = Figure(size=(1200, 1050))
+for (run, parameters) in enumerate(parameter_sets())
+    model = create_world(; parameters...)
+    for target in (0, 5, 45)
+        advance!(model, target - model.tick)
+        push!(rows, merge((run=run, max_age=parameters[:max_age],
+                           init_white=parameters[:init_white]), observe(model)))
+        fig = snapshot_figure(model; title="Опыт $run")
+        save_figure(fig, "daisyworld__param",
+                    "run-$(run)-step-$(lpad(target, 3, '0')).png")
+        display(fig)
+    end
+    ax = Axis(final_fig[(run - 1) ÷ 2 + 1, (run - 1) % 2 + 1],
+              title="Возраст $(parameters[:max_age]), белые $(parameters[:init_white])",
+              aspect=1)
+    heatmap!(ax, model.temperature; colormap=:thermal, colorrange=(-20, 60))
+    for (breed, colour) in ((:black, :black), (:white, :white))
+        points = [Point2f(a.pos...) for a in allagents(model) if a.breed == breed]
+        isempty(points) || scatter!(ax, points; color=colour, markersize=5,
+                                    strokecolor=:gray30, strokewidth=0.3)
+    end
+end
+
+# ## Сопоставление конечных состояний
+save_figure(final_fig, "daisyworld__param", "final-state-grid.png";
+            report_name="parameter-spatial-comparison.png")
+display(final_fig)
+summary = DataFrame(rows)
+CSV.write(scenario_data("daisyworld__param", "snapshots.csv"), summary)
+summary[summary.time .== 45, :]
