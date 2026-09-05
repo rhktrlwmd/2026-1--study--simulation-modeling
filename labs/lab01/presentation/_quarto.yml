@@ -3,19 +3,23 @@ project:
   output-dir: "_output"
 
 lang: ru-RU
+number-sections: true
+toc: true
+toc-title: "Содержание"
+toc-depth: 1
 format:
   revealjs:
     embed-resources: true
-    slide-number: true
-    transition: slide
+    slide-number: c/t
+    transition: fade
     background-transition: none
-    width: 1280
-    height: 720
-    margin: 0.18
+    width: 1600
+    height: 900
+    margin: 0.09
     center: true
     controls: true
-    progress: true
+    progress: false
     smaller: true
     theme: simple
-    logo: ../image/brand/university-mark.png
+    footer: "Исаева Зарина Исмайилбековна　　　　Имитационное моделирование　　　　2026-09-05"
     css: styles.css
