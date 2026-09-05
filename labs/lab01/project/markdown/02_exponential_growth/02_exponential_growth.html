@@ -2389,7 +2389,7 @@ window.Quarto = {
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">mkpath</span>(<span class="fu">datadir</span>(script_name, <span class="st">&quot;parametric_scan&quot;</span>))</span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">mkpath</span>(<span class="fu">plotsdir</span>(script_name))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/plots/02_exponential_growth&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/plots/02_exponential_growth&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2450,7 +2450,7 @@ window.Quarto = {
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="fu">savefig</span>(base_plot, <span class="fu">plotsdir</span>(script_name, <span class="st">&quot;single_experiment.png&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/plots/02_exponential_growth/single_experiment.png&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/plots/02_exponential_growth/single_experiment.png&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2500,7 +2500,7 @@ window.Quarto = {
 <span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> <span class="fu">sort</span>(<span class="fu">DataFrame</span>(summary_rows), <span class="op">:</span>alpha)</span>
 <span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>CSV.<span class="fu">write</span>(<span class="fu">datadir</span>(script_name, <span class="st">&quot;parameter_summary.csv&quot;</span>), summary)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/data/02_exponential_growth/parameter_summary.csv&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/data/02_exponential_growth/parameter_summary.csv&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2527,7 +2527,7 @@ window.Quarto = {
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="fu">savefig</span>(comparison_plot, <span class="fu">plotsdir</span>(script_name, <span class="st">&quot;parametric_scan_comparison.png&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/plots/02_exponential_growth/parametric_scan_comparison.png&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/plots/02_exponential_growth/parametric_scan_comparison.png&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2557,7 +2557,7 @@ window.Quarto = {
 <span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="fu">savefig</span>(doubling_plot, <span class="fu">plotsdir</span>(script_name, <span class="st">&quot;doubling_time_vs_alpha.png&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/plots/02_exponential_growth/doubling_time_vs_alpha.png&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/plots/02_exponential_growth/doubling_time_vs_alpha.png&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2587,7 +2587,7 @@ window.Quarto = {
 <span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="fu">savefig</span>(benchmark_plot, <span class="fu">plotsdir</span>(script_name, <span class="st">&quot;computation_time_vs_alpha.png&quot;</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>&quot;/workspace/labs/lab01/project/plots/02_exponential_growth/computation_time_vs_alpha.png&quot;</code></pre>
+<pre><code>&quot;/workspace/lab01/plots/02_exponential_growth/computation_time_vs_alpha.png&quot;</code></pre>
 </div>
 </div>
 </section>
@@ -2617,7 +2617,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre>Параметрическое исследование экспоненциального роста
-  базовый результат: /workspace/labs/lab01/project/data/02_exponential_growth/single/exp_growth_alpha=0.3_saveat=0.1_tmax=10.0_u0=1.0.jld2
+  базовый результат: /workspace/lab01/data/02_exponential_growth/single/exp_growth_alpha=0.3_saveat=0.1_tmax=10.0_u0=1.0.jld2
   число экспериментов: 5
 <span class="ansi-bold">5×3 DataFrame</span>
 <span class="ansi-bold"> Row </span>│<span class="ansi-bold"> alpha   </span><span class="ansi-bold"> final_population </span><span class="ansi-bold"> doubling_time </span>

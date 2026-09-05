@@ -7,11 +7,11 @@ format:
   revealjs:
     embed-resources: true
     slide-number: true
-    transition: fade
+    transition: slide
     background-transition: none
     width: 1280
     height: 720
-    margin: 0.12
+    margin: 0.18
     center: true
     controls: true
     progress: true
