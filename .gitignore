@@ -370,6 +370,7 @@ vm/
 **/.jupyter/
 **/.quarto/
 **/_output/
+**/_includes/
 **/__pycache__/
 outputs/
 *.mp4

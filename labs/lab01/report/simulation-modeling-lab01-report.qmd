@@ -17,7 +17,26 @@ abstract: |
   как литературный код, из которого сформированы чистые Julia-сценарии,
   Jupyter-ноутбуки и Quarto-документы. Результат проверен автоматическими
   тестами и сохранён в воспроизводимой структуре проекта.
+execute:
+  enabled: false
 ---
+
+# Содержание {.unnumbered}
+
+1. Паспорт работы
+2. Цель и задания
+3. Математическая постановка
+4. Организация вычислительного проекта
+5. Реализация модели
+6. Полный базовый сценарий
+7. Полный параметрический сценарий
+8. Литературное программирование и производные форматы
+9. Проверка и воспроизводимость
+10. Учёт изменений
+11. Выводы
+12. Источники
+
+{{< pagebreak >}}
 
 # Паспорт работы {.unnumbered}
 
@@ -103,6 +122,7 @@ $t\in[0;10]$. Значения решения сохраняются с шаго
 в обоих сценариях.
 
 ```julia
+"""Правая часть уравнения экспоненциального роста `du/dt = αu`."""
 function exponential_growth!(du, u, p, t)
     alpha = p isa NamedTuple ? p.alpha : p
     du[1] = alpha * u[1]
@@ -117,6 +137,8 @@ function doubling_time(alpha)
 end
 ```
 
+Листинг 1 — Полный модуль модели `src/exponential_growth.jl`.
+
 ## Базовый эксперимент
 
 В литературном сценарии `01_exponential_growth.jl` задача описана вместе с
@@ -125,17 +147,15 @@ end
 
 ![Фрагмент литературного сценария базового опыта](../image/implementation/literate-source.png){#fig-source width=94%}
 
-```julia
-problem = ODEProblem(exponential_growth!, [u0], tspan, alpha)
-solution = solve(problem, Tsit5(); saveat=saveat)
+Ниже непосредственно подключён полный QMD-фрагмент, автоматически полученный
+из литературного исходника `scripts/01_exponential_growth.jl`. В нём сохранены
+инициализация проекта, параметры, решение, аналитическая проверка, запись CSV и
+JLD2, построение графика и вывод контрольных величин.
 
-results = DataFrame(
-    time=solution.t,
-    numerical=first.(solution.u),
-    analytical=analytic_solution.(u0, alpha, solution.t),
-)
-results.error = abs.(results.numerical .- results.analytical)
-```
+{{< include _includes/01_exponential_growth.qmd >}}
+
+Листинг 2 — Полный сценарий базового эксперимента, интегрированный из
+`project/markdown/01_exponential_growth/01_exponential_growth.qmd`.
 
 Получено 101 сохранённое значение. При $t=10$ численное решение равно
 $20{,}0854485$, аналитическое — $20{,}0855369$. Относительная ошибка
@@ -159,6 +179,18 @@ $0{,}1$, $0{,}3$, $0{,}5$, $0{,}8$ и $1{,}0$. Для каждого набор�
 расширять сетку параметров без дублирования вычислительного кода.
 
 ![Фрагмент сценария серии экспериментов](../image/implementation/parameter-run.png){#fig-scan-run width=94%}
+
+Следующий фрагмент подключён из QMD, сформированного `Literate.jl` на основе
+`scripts/02_exponential_growth.jl`. Приведён весь сценарий: функция одного
+опыта, базовый запуск через `produce_or_load`, сетка параметров, обход пяти
+наборов, сохранение таблиц, четыре графика, бенчмарк и архивирование объектов.
+
+{{< include _includes/02_exponential_growth.qmd >}}
+
+Листинг 3 — Полный сценарий параметрического исследования, интегрированный из
+`project/markdown/02_exponential_growth/02_exponential_growth.qmd`.
+
+{{< pagebreak >}}
 
 | $\alpha$ | $u(10)$ | $T_2$ |
 |---:|---:|---:|
@@ -194,12 +226,54 @@ $0{,}1$, $0{,}3$, $0{,}5$, $0{,}8$ и $1{,}0$. Для каждого набор�
 - `.qmd` для публикации читаемой документации.
 
 ```julia
-Literate.script(source, clean_dir; name=script_name, credit=false)
-Literate.notebook(source, notebook_dir; name=script_name,
-                  execute=false, credit=false)
-Literate.markdown(source, quarto_dir; name=script_name,
-                  flavor=Literate.QuartoFlavor(), credit=false)
+#!/usr/bin/env julia
+
+using DrWatson
+@quickactivate "project"
+using Literate
+
+function generate_formats(source::AbstractString)
+    isfile(source) || error("Source file not found: $(source)")
+
+    script_name = splitext(basename(source))[1]
+    clean_dir = scriptsdir(script_name)
+    quarto_dir = projectdir("markdown", script_name)
+    notebook_dir = projectdir("notebooks", script_name)
+
+    mkpath(clean_dir)
+    mkpath(quarto_dir)
+    mkpath(notebook_dir)
+
+    println("Generating formats from $(source)")
+    Literate.script(source, clean_dir; name=script_name, credit=false)
+    println("  clean Julia: $(joinpath(clean_dir, script_name * ".jl"))")
+
+    Literate.notebook(
+        source,
+        notebook_dir;
+        name=script_name,
+        execute=false,
+        credit=false,
+    )
+    println("  notebook:    $(joinpath(notebook_dir, script_name * ".ipynb"))")
+
+    Literate.markdown(
+        source,
+        quarto_dir;
+        name=script_name,
+        flavor=Literate.QuartoFlavor(),
+        credit=false,
+    )
+    println("  Quarto:      $(joinpath(quarto_dir, script_name * ".qmd"))")
+end
+
+isempty(ARGS) && error(
+    "Usage: julia --project=. scripts/tangle.jl <source.jl> [source.jl ...]",
+)
+foreach(generate_formats, ARGS)
 ```
+
+Листинг 4 — Полный генератор производных форматов `scripts/tangle.jl`.
 
 Оба ноутбука выполнены, поэтому выходные таблицы и графики сохранены внутри
 IPYNB и доступны после открытия без повторного расчёта.
@@ -212,6 +286,37 @@ IPYNB и доступны после открытия без повторног�
 
 Автоматические тесты проверяют четыре свойства: значение правой части ОДУ,
 аналитическую формулу, время удвоения и обработку недопустимого $\alpha$.
+
+```julia
+using Test
+using DifferentialEquations
+
+include(joinpath(@__DIR__, "..", "src", "exponential_growth.jl"))
+
+@testset "Exponential growth" begin
+    u0 = 1.0
+    alpha = 0.3
+    tspan = (0.0, 10.0)
+    problem = ODEProblem(exponential_growth!, [u0], tspan, alpha)
+    solution = solve(problem, Tsit5(); saveat=0.1)
+
+    @test isapprox(
+        last(solution.u)[1],
+        analytic_solution(u0, alpha, last(solution.t));
+        rtol=1e-5,
+    )
+    @test isapprox(
+        doubling_time(alpha),
+        2.3104906018664844;
+        rtol=1e-12,
+    )
+    @test_throws ArgumentError doubling_time(0.0)
+end
+
+println("All lab01 tests passed")
+```
+
+Листинг 5 — Полный набор автоматических проверок `test/runtests.jl`.
 
 ![Успешное выполнение автоматических тестов](../image/verification/tests-passed.png){#fig-tests width=94%}
 
@@ -229,6 +334,100 @@ cd labs/lab01/project
 julia --project=. -e 'using Pkg; Pkg.instantiate()'
 make all
 ```
+
+Полная последовательность целей проекта задана следующим `Makefile`.
+
+```makefile
+.PHONY: setup tangle run notebooks docs test all clean-results
+
+setup:
+	julia --project=. scripts/setup_environment.jl
+
+tangle:
+	julia --project=. scripts/tangle.jl scripts/01_exponential_growth.jl
+	julia --project=. scripts/tangle.jl scripts/02_exponential_growth.jl
+
+run:
+	julia --project=. scripts/01_exponential_growth.jl
+	julia --project=. scripts/02_exponential_growth.jl
+
+notebooks:
+	jupyter nbconvert --to notebook --execute --inplace \
+		--ExecutePreprocessor.kernel_name=julia-lab01-1.11 \
+		--ExecutePreprocessor.timeout=600 \
+		notebooks/01_exponential_growth/01_exponential_growth.ipynb
+	jupyter nbconvert --to notebook --execute --inplace \
+		--ExecutePreprocessor.kernel_name=julia-lab01-1.11 \
+		--ExecutePreprocessor.timeout=600 \
+		notebooks/02_exponential_growth/02_exponential_growth.ipynb
+
+docs:
+	quarto render markdown/01_exponential_growth/01_exponential_growth.qmd \
+		--to html --embed-resources
+	quarto render markdown/02_exponential_growth/02_exponential_growth.qmd \
+		--to html --embed-resources
+
+test:
+	julia --project=. test/runtests.jl
+
+all: tangle run notebooks docs test
+
+clean-results:
+	rm -rf data/01_exponential_growth data/02_exponential_growth
+	rm -rf plots/01_exponential_growth plots/02_exponential_growth
+	rm -rf notebooks/01_exponential_growth notebooks/02_exponential_growth
+	rm -rf markdown/01_exponential_growth markdown/02_exponential_growth
+```
+
+Листинг 6 — Полный `project/Makefile`.
+
+Начальная настройка среды выполняется отдельным скриптом.
+
+```julia
+using Pkg
+
+Pkg.activate(joinpath(@__DIR__, ".."))
+Pkg.instantiate()
+Pkg.precompile()
+
+using IJulia
+
+project_path = dirname(Base.active_project())
+IJulia.installkernel("Julia lab01", "--project=$(project_path)")
+
+println("Environment is ready")
+println("Julia: ", VERSION)
+println("Project: ", project_path)
+```
+
+Листинг 7 — Полный скрипт `scripts/setup_environment.jl`.
+
+Файл `Project.toml` фиксирует имя проекта, версию Julia и прямые зависимости.
+Точные транзитивные версии записаны в `Manifest.toml`.
+
+```toml
+name = "project"
+uuid = "5e6fc9a5-189d-46e2-b824-9dd395edfa0f"
+authors = ["rhktrlwmd"]
+version = "1.0.0"
+
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+Quarto = "d7167be5-f61b-4dc9-b75c-ab62374668c5"
+
+[compat]
+julia = "1.11"
+```
+
+Листинг 8 — Полный `project/Project.toml`.
 
 # Учёт изменений
 
