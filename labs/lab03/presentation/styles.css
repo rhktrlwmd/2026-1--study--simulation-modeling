@@ -1,0 +1,116 @@
+:root {
+  --r-background-color: #ffffff;
+  --r-main-color: #111111;
+  --r-heading-color: #ffffff;
+  --r-link-color: #3536b8;
+  --r-main-font: "Palatino Linotype", "Times New Roman", serif;
+  --r-heading-font: "Palatino Linotype", "Times New Roman", serif;
+}
+
+.reveal { font-size: 31px; }
+.reveal .slides { text-align: left; counter-reset: section; }
+.reveal .slides section { padding: 0; }
+.reveal h1, .reveal h2 { text-transform: none; font-weight: 400; letter-spacing: 0; }
+.reveal h2 {
+  position: relative;
+  left: -72px;
+  width: calc(100% + 144px);
+  margin: -34px 0 48px;
+  padding: 13px 24px 12px;
+  color: #fff;
+  background: #3939b9;
+  font-size: 1.24em;
+  box-sizing: border-box;
+}
+.reveal p, .reveal li { line-height: 1.22; }
+.reveal ul, .reveal ol { margin-left: 1.05em; }
+.reveal li::marker { color: #3536b8; }
+.reveal strong { color: #2526a8; }
+.reveal table { margin: 0 auto; border-collapse: collapse; font-size: .78em; }
+.reveal table th, .reveal table td { border-bottom: 1px solid #555; padding: .25em .65em; }
+.reveal table th { color: #111; background: #fff; }
+.reveal pre { box-shadow: none; border: 1px solid #d6d6e9; font-size: .62em; }
+.reveal img { max-height: 560px; object-fit: contain; box-shadow: none; border: 0; }
+
+#title-slide { text-align: center; padding-top: 0; top: 0 !important; transform: none !important; height: 100%; }
+#title-slide::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  right: -50px;
+  top: 120px;
+  height: 235px;
+  border-radius: 17px;
+  background: #3939b9;
+  box-shadow: 10px 12px 5px rgba(0,0,0,.32);
+  z-index: -1;
+}
+#title-slide h1.title { position: absolute; top: 145px; left: 0; width: 100%; margin: 0; color: #fff; font-size: 1.55em; z-index: 2; }
+#title-slide .subtitle { position: absolute; top: 225px; left: 8%; width: 84%; margin: 0; color: #fff; font-size: 1.08em; line-height: 1.25; z-index: 2; }
+#title-slide .quarto-title-authors { position: absolute; top: 440px; left: 0; width: 100%; margin: 0; font-size: 1.12em; }
+#title-slide .quarto-title-affiliation { display: none; }
+#title-slide .date { position: absolute; top: 585px; left: 0; width: 100%; margin: 0; font-size: 1em; }
+
+#TOC ul { list-style: none; counter-reset: toc; font-size: 1.04em; line-height: 1.45; }
+#TOC li { counter-increment: toc; margin: .22em 0; color: #3536b8; }
+#TOC li::before { content: counter(toc); display: inline-flex; width: 1.45em; height: 1.45em; margin-right: .5em; align-items: center; justify-content: center; border-radius: 50%; color: #fff; background: radial-gradient(circle at 35% 30%, #7778df, #202066 72%); }
+
+.reveal section.level1 { text-align: center; padding-top: 220px; counter-increment: section; }
+.reveal section.level1 h1 {
+  color: #fff;
+  background: #3939b9;
+  border-radius: 16px;
+  box-shadow: 9px 10px 5px rgba(0,0,0,.3);
+  padding: 25px 30px;
+  font-size: 1.22em;
+}
+.reveal section.level1 h1::before { display: block; content: "Раздел " counter(section); color: #111; background: #fff; margin: -125px 0 55px; font-size: .8em; }
+
+.reveal .footer {
+  bottom: 0 !important;
+  left: 0 !important;
+  width: calc(100% - 118px) !important;
+  height: 31px;
+  padding: 7px 18px 0 !important;
+  color: #fff !important;
+  background: #202066;
+  font-size: 14px !important;
+  text-align: center;
+  box-sizing: border-box;
+}
+.reveal .slide-number {
+  display: block !important;
+  position: fixed !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 118px;
+  height: 31px;
+  padding: 7px 12px 0;
+  color: #fff !important;
+  background: #3536b8;
+  font-size: 14px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.reveal .pdf-page { position: relative !important; }
+.reveal .pdf-page .slide-number-pdf {
+  display: block !important;
+  position: absolute !important;
+  top: auto !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 9999 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.reveal .controls { color: #8f8fdf; bottom: 34px; transform: scale(.58); transform-origin: right bottom; }
+.reveal .progress { display: none; }
+
+@media print {
+  .reveal .footer, .reveal .slide-number {
+    display: block !important;
+    position: fixed !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
