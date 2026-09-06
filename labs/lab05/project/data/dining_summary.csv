@@ -1,0 +1,3 @@
+variant,deadlock,last_time,events,meals,fairness,horizon
+Классическая сеть,true,0.44656157095740223,5,0,0.0,50.0
+Сеть с арбитром,false,50.0,76,24,0.8597014925373134,50.0

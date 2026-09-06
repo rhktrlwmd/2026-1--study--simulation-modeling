@@ -1,0 +1,28 @@
+name = "PetriDiningLab"
+uuid = "64b9d50f-0898-4519-9d86-542c6fe5bb23"
+authors = ["rhktrlwmd"]
+version = "5.0.0"
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
+IJulia = "7073ff75-c697-5162-941a-fcdaad2a7d2a"
+Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[compat]
+CairoMakie = "0.15"
+DataFrames = "1"
+DrWatson = "2"
+IJulia = "1"
+Literate = "2"
+julia = "1.11"
+
+[preferences.Makie]
+precompile_workload = false
+
+[preferences.CairoMakie]
+precompile_workload = false
