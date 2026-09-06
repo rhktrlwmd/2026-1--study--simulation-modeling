@@ -1,38 +1,25 @@
 project:
-  title: "presentation"
+  title: "Лабораторная работа № 4"
   output-dir: "_output"
 
-standalone: true
-self-contained: true
-slide-level: 2
 lang: ru-RU
-crossref:
-  lof-title: Список иллюстраций
-  lot-title: Список таблиц
-  lol-title: Листинги
-format: # Formats
-  beamer: # Pdf output format
-    toc: true
-    toc-title: Содержание
-    number-sections: false
-    number-depth: 1
-    colorlinks: false
-    toc-depth: 1
-    aspectratio: 169
-    section-titles: true
-    incremental: true
-    navigation: horizontal
-    csquotes: true
-    indent: true
-    include-in-header:
-      - file: _resources/tex/beamer.tex
-    babel-lang: russian
-    babel-otherlangs: english
-  revealjs: # Html output
-    transition: slide
-    margin: 0.2
+number-sections: true
+toc: true
+toc-title: "Содержание"
+toc-depth: 1
+format:
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    transition: fade
+    background-transition: none
+    width: 1600
+    height: 900
+    margin: 0.09
+    center: true
+    controls: true
+    progress: false
     smaller: true
-    slide-number: true
-    output-ext: html
-    theme: beige
-    logo: _resources/image/logo_rudn.png
+    theme: simple
+    footer: "Исаева Зарина Исмайилбековна　　　　Имитационное моделирование　　　　2026-09-06"
+    css: styles.css
