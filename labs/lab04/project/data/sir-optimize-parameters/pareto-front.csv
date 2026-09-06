@@ -1,0 +1,2 @@
+generation,candidate,rank,crowding,detection_time,beta_detected,migration,quarantine_threshold,death_fraction,peak_fraction,raw_death_fraction,raw_peak_fraction
+7,1,1,Inf,2,0.01601791598100073,0.20323671300693968,0.10198848581858364,0.0,0.003,0.0,0.003
