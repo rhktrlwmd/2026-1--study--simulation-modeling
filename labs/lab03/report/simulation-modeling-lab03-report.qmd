@@ -128,11 +128,11 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/Project.toml.md >}}
 
-Листинг 1 — полный файл **project/Project.toml**.
+Листинг 1 — полный файл `project/Project.toml`.
 
 {{< include _includes/Makefile.md >}}
 
-Листинг 2 — полный файл **project/Makefile**.
+Листинг 2 — полный файл `project/Makefile`.
 
 {{< include _includes/setup-environment.jl.md >}}
 
@@ -149,7 +149,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld-module.jl.md >}}
 
-Листинг 4 — полный модуль **project/src/daisyworld.jl**.
+Листинг 4 — полный модуль `project/src/daisyworld.jl`.
 
 {{< include _includes/experiment-tools.jl.md >}}
 
@@ -162,7 +162,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld.qmd >}}
 
-Листинг 6 — литературный сценарий **scripts/daisyworld.jl**.
+Листинг 6 — литературный сценарий `scripts/daisyworld.jl`.
 
 :::::::::::::: {.columns}
 ::: {.column width="33%"}
@@ -188,7 +188,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld-animate.qmd >}}
 
-Листинг 7 — сценарий **scripts/daisyworld-animate.jl**.
+Листинг 7 — сценарий `scripts/daisyworld-animate.jl`.
 
 ![Финальное состояние 60-кадровой анимации](../image/results/animation-final-state.png){#fig-animation width=72%}
 
@@ -196,7 +196,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld-count.qmd >}}
 
-Листинг 8 — сценарий **scripts/daisyworld-count.jl**.
+Листинг 8 — сценарий `scripts/daisyworld-count.jl`.
 
 ![Динамика численности в базовом опыте](../image/results/baseline-population-dynamics.png){#fig-count width=88%}
 
@@ -212,7 +212,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld-luminosity.qmd >}}
 
-Листинг 9 — сценарий **scripts/daisyworld-luminosity.jl**.
+Листинг 9 — сценарий `scripts/daisyworld-luminosity.jl`.
 
 ![Численность, температура, светимость и альбедо](../image/results/luminosity-feedback-dynamics.png){#fig-dynamics width=76%}
 
@@ -232,7 +232,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld__param.qmd >}}
 
-Листинг 10 — сценарий **scripts/daisyworld__param.jl**.
+Листинг 10 — сценарий `scripts/daisyworld__param.jl`.
 
 ![Пространственные состояния четырёх опытов](../image/results/parameter-spatial-comparison.png){#fig-param-space width=88%}
 
@@ -243,7 +243,7 @@ DrWatson задаёт устойчивые пути к данным и резу�
 
 {{< include _includes/daisyworld-count__param.qmd >}}
 
-Листинг 11 — сценарий **scripts/daisyworld-count__param.jl**.
+Листинг 11 — сценарий `scripts/daisyworld-count__param.jl`.
 
 ![Численность для четырёх сочетаний параметров](../image/results/parameter-population-comparison.png){#fig-param-count width=92%}
 
@@ -255,7 +255,7 @@ max_age=40 и init_white=0,2.
 
 {{< include _includes/daisyworld-luminosity__param.qmd >}}
 
-Листинг 12 — сценарий **scripts/daisyworld-luminosity__param.jl**.
+Листинг 12 — сценарий `scripts/daisyworld-luminosity__param.jl`.
 
 ![Температура в четырёх опытах ramp](../image/results/parameter-temperature-comparison.png){#fig-param-temp width=92%}
 
@@ -271,7 +271,7 @@ max_age=40 и init_white=0,2.
 
 {{< include _includes/tangle.jl.md >}}
 
-Листинг 13 — генератор производных форматов **scripts/tangle.jl**.
+Листинг 13 — генератор производных форматов `scripts/tangle.jl`.
 
 :::::::::::::: {.columns}
 ::: {.column width="50%"}
@@ -291,7 +291,7 @@ max_age=40 и init_white=0,2.
 
 {{< include _includes/runtests.jl.md >}}
 
-Листинг 14 — полный файл **test/runtests.jl**.
+Листинг 14 — полный файл `test/runtests.jl`.
 
 ![Результаты 28 автоматических проверок](../image/verification/tests-passed.png){#fig-tests width=94%}
 
