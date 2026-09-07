@@ -1,0 +1,15 @@
+:root { --blue: #2638b6; --navy: #151f66; --ink: #172033; --soft: #eef2ff; }
+.reveal { font-family: Arial, "DejaVu Sans", sans-serif; color: var(--ink); }
+.reveal h1, .reveal h2 { color: var(--blue); font-weight: 600; }
+.reveal h1 { font-size: 1.45em; }
+.reveal h2 { font-size: 1.18em; border-bottom: 4px solid var(--blue); padding-bottom: .18em; }
+.reveal .title { color: white; background: var(--blue); padding: .45em .55em; border-radius: .25em; }
+.reveal .subtitle { color: var(--navy); }
+.reveal p, .reveal li { font-size: .96em; line-height: 1.32; }
+.reveal img { max-height: 610px; object-fit: contain; }
+.reveal pre code { font-size: .80em; line-height: 1.18; max-height: 580px; }
+.reveal table { font-size: .82em; }
+.reveal .slide-number { color: var(--navy); }
+.reveal .footer { background: var(--navy); color: white; padding: 5px 18px; font-size: 17px; }
+.accent { color: var(--blue); font-weight: 700; }
+.small { font-size: .78em; }
