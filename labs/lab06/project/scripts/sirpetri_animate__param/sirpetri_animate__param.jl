@@ -1,0 +1,26 @@
+ENV["GKSwstype"] = "100"
+using DataFrames, Plots
+include(joinpath(dirname(Base.active_project()), "src", "SIRPetri.jl"))
+include(joinpath(dirname(Base.active_project()), "src", "StudyIO.jl"))
+using .SIRPetri, .StudyIO
+
+group = "sirpetri-regimes"
+cases = [(name="медленнее", beta=0.1, gamma=0.1),
+         (name="базовый", beta=0.3, gamma=0.1),
+         (name="быстрое выздоровление", beta=0.3, gamma=0.2)]
+rows = NamedTuple[]
+p = plot(; xlabel="Время", ylabel="I", title="Три режима модели SIR")
+for case in cases
+    config = SIRConfig(beta=case.beta, gamma=case.gamma)
+    trajectory = deterministic_trajectory(config; saveat=0.2)
+    plot!(p, trajectory.time, trajectory.I; linewidth=2.5,
+          label="$(case.name): β=$(case.beta), γ=$(case.gamma)")
+    peak = refined_peak(config)
+    push!(rows, (case=case.name, beta=case.beta, gamma=case.gamma,
+                 frames=nrow(trajectory), peak_I=peak.infected, peak_time=peak.time))
+end
+save_csv(group, "regime_manifest.csv", DataFrame(rows))
+save_plot(group, "regime-comparison.png", p)
+println("Сопоставлено режимов: $(length(cases)); по 501 состоянию в каждом.")
+
+# This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

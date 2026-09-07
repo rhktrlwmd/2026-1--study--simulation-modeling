@@ -1,0 +1,48 @@
+## Сводный отчёт по ранее сохранённым данным
+
+
+Этот сценарий принципиально не запускает модель повторно: все таблицы читаются
+из CSV, созданных тремя предыдущими обязательными сценариями.
+
+```julia
+# # Сводный отчёт по ранее сохранённым данным
+#
+# Этот сценарий принципиально не запускает модель повторно: все таблицы читаются
+# из CSV, созданных тремя предыдущими обязательными сценариями.
+
+ENV["GKSwstype"] = "100"
+using CSV, DataFrames, Plots, Statistics
+include(joinpath(dirname(Base.active_project()), "src", "StudyIO.jl"))
+using .StudyIO
+
+group = "sirpetri-report"
+det = CSV.read(data_dir("sirpetri-run", "sir_deterministic.csv"), DataFrame)
+ssa = CSV.read(data_dir("sirpetri-run", "sir_stochastic_events.csv"), DataFrame)
+events = CSV.read(data_dir("sirpetri-run", "event_time_comparison.csv"), DataFrame)
+scan = CSV.read(data_dir("sirpetri-scan", "beta_scan.csv"), DataFrame)
+manifest = CSV.read(data_dir("sirpetri-animation", "animation_manifest.csv"), DataFrame)
+
+comparison = plot(det.time, det.I; label="ODE", color="#174a7e", linewidth=3,
+    xlabel="Время", ylabel="I", title="ODE и SSA")
+plot!(comparison, ssa.time, ssa.I; label="SSA, seed=123", color="#c43b3b",
+      seriestype=:steppost, alpha=0.75)
+difference = plot(events.time, events.difference; label=false, color="#7b3294",
+    xlabel="Время события SSA", ylabel="SSA I − ODE I",
+    title="Отклонение на собственной сетке событий")
+save_plot(group, "method-comparison.png",
+    plot(comparison, difference; layout=(2, 1), size=(1100, 850)))
+
+sensitivity = plot(scan.beta, scan.refined_peak; label="уточнённый пик",
+    marker=:circle, xlabel="β", ylabel="Imax", title="Чувствительность к β")
+plot!(sensitivity, scan.beta, scan.grid_peak; label="максимум на Δt=0.5", marker=:square)
+save_plot(group, "sensitivity-summary.png", sensitivity)
+
+summary = DataFrame(
+    metric=["RMSE I на событиях SSA", "Среднее |ΔI|", "Кадров анимации", "Точек β"],
+    value=[sqrt(mean(events.difference .^ 2)), mean(abs.(events.difference)),
+           manifest.frames[1], nrow(scan)])
+save_csv(group, "report_metrics.csv", summary)
+println(summary)
+println("Отчёт собран только из существующих CSV; повторной симуляции нет.")
+
+```

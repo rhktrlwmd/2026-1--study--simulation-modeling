@@ -1,0 +1,57 @@
+## Базовый эксперимент SIR через сеть Петри
+
+
+Создаём сеть Петри, решаем детерминированную систему и выполняем один
+стохастический прогон методом Гиллеспи с фиксированным seed.
+
+```julia
+# # Базовый эксперимент SIR через сеть Петри
+#
+# Создаём сеть Петри, решаем детерминированную систему и выполняем один
+# стохастический прогон методом Гиллеспи с фиксированным seed.
+
+ENV["GKSwstype"] = "100"
+using CSV, DataFrames, Plots, Statistics
+include(joinpath(dirname(Base.active_project()), "src", "SIRPetri.jl"))
+include(joinpath(dirname(Base.active_project()), "src", "StudyIO.jl"))
+using .SIRPetri, .StudyIO
+
+group = "sirpetri-run"
+config = SIRConfig()
+network = build_sir_network()
+change = incidence_matrix(network)
+
+deterministic = deterministic_trajectory(config; saveat=0.5)
+stochastic = stochastic_trajectory(config; seed=123)
+event_comparison = compare_at_events(config, stochastic)
+peak = refined_peak(config)
+
+save_csv(group, "sir_deterministic.csv", deterministic)
+save_csv(group, "sir_stochastic_events.csv", stochastic)
+save_csv(group, "event_time_comparison.csv", event_comparison)
+save_csv(group, "refined_peak.csv", DataFrame(
+    peak_time=[peak.time], numerical_peak=[peak.infected], analytical_peak=[peak.analytical],
+    absolute_error=[abs(peak.infected - peak.analytical)]))
+save_csv(group, "incidence_matrix.csv", DataFrame(state=["S", "I", "R"],
+    infection=change[:, 1], recovery=change[:, 2]))
+
+save_plot(group, "petri-network.png", petri_diagram())
+save_plot(group, "deterministic-dynamics.png",
+    sir_plot(deterministic; title="Детерминированная модель: β=0.3, γ=0.1"))
+save_plot(group, "stochastic-dynamics.png",
+    sir_plot(stochastic; title="Стохастическая модель: seed=123", stepped=true))
+
+metrics = DataFrame(method=["ODE", "SSA"],
+    peak_I=[peak.infected, maximum(stochastic.I)],
+    peak_time=[peak.time, stochastic.time[argmax(stochastic.I)]],
+    final_R=[deterministic.R[end], stochastic.R[end]],
+    population_error=[maximum(abs.(deterministic.S + deterministic.I + deterministic.R .- 1000)),
+                      maximum(abs.(stochastic.S + stochastic.I + stochastic.R .- 1000))])
+save_csv(group, "summary.csv", metrics)
+
+println("Petri places/transitions: $(length(change[:, 1]))/$(length(change[1, :]))")
+println("ODE rows: $(nrow(deterministic)); SSA events: $(nrow(stochastic))")
+println("Refined peak: t=$(round(peak.time, digits=6)), I=$(round(peak.infected, digits=3))")
+println("Analytical check error: $(abs(peak.infected - peak.analytical))")
+
+```

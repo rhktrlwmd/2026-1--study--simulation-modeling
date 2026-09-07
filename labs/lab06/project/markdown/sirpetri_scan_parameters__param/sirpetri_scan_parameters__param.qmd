@@ -1,0 +1,37 @@
+# Двумерное параметрическое сканирование
+
+Небольшая, но полностью рассчитанная сетка β×γ служит разведочным
+экспериментом. Она не заменяет обязательное сканирование 15 значений β.
+
+````julia
+ENV["GKSwstype"] = "100"
+using DataFrames, Plots
+include(joinpath(dirname(Base.active_project()), "src", "SIRPetri.jl"))
+include(joinpath(dirname(Base.active_project()), "src", "StudyIO.jl"))
+using .SIRPetri, .StudyIO
+
+group = "sirpetri-beta-gamma"
+rows = NamedTuple[]
+for gamma in (0.05, 0.10, 0.20), beta in (0.10, 0.30, 0.50, 0.80)
+    config = SIRConfig(beta=beta, gamma=gamma)
+    peak = refined_peak(config)
+    trajectory = deterministic_trajectory(config; saveat=0.5)
+    push!(rows, (beta=beta, gamma=gamma, peak_I=peak.infected,
+                 peak_time=peak.time, final_R=trajectory.R[end],
+                 initial_growth=beta*config.susceptible-gamma))
+end
+grid = DataFrame(rows)
+save_csv(group, "beta-gamma-grid.csv", grid)
+
+p = plot(; xlabel="β", ylabel="Уточнённый пик I", title="Разведочная сетка β×γ")
+for subset in groupby(grid, :gamma)
+    plot!(p, subset.beta, subset.peak_I; marker=:circle, label="γ=$(subset.gamma[1])")
+end
+save_plot(group, "beta-gamma-grid.png", p)
+println("Рассчитано комбинаций: $(nrow(grid)); сетка предварительная, без интерполяции.")
+````
+
+---
+
+*This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+

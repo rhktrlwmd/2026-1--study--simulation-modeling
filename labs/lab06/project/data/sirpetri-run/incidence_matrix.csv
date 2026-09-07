@@ -1,0 +1,4 @@
+state,infection,recovery
+S,-1,0
+I,1,-1
+R,0,1
