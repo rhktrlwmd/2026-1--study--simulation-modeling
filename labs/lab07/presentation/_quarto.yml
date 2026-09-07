@@ -1,28 +1,25 @@
 project:
   title: "Лабораторная работа № 7"
   output-dir: "_output"
-standalone: true
-self-contained: true
-slide-level: 2
+
 lang: ru-RU
+number-sections: true
+toc: true
+toc-title: "Содержание"
+toc-depth: 1
 format:
-  beamer:
-    toc: true
-    toc-title: Содержание
-    aspectratio: 169
-    section-titles: true
-    incremental: false
-    colorlinks: false
-    include-in-header:
-      - file: _resources/tex/beamer.tex
-    babel-lang: russian
-    babel-otherlangs: english
   revealjs:
-    transition: slide
-    margin: 0.12
+    embed-resources: true
+    slide-number: c/t
+    transition: fade
+    background-transition: none
+    width: 1600
+    height: 900
+    margin: 0.09
+    center: true
+    controls: true
+    progress: false
     smaller: true
-    slide-number: true
-    output-ext: html
-    theme: white
+    theme: simple
+    footer: "Исаева Зарина Исмайилбековна　　　　Имитационное моделирование　　　　2026-09-07"
     css: styles.css
-    logo: ../image/brand/logo-rudn.png

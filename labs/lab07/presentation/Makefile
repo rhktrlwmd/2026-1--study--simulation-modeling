@@ -1,6 +1,8 @@
 OUTPUT := _output
 SOURCE := simulation-modeling-lab07-presentation.qmd
+FINAL := simulation-modeling-lab07-presentation.html
 FINAL_PDF := simulation-modeling-lab07-presentation.pdf
+CHROME ?= /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
 
 .PHONY: all html pdf verify clean
 
@@ -8,15 +10,17 @@ all: html pdf verify
 
 html:
 	quarto render $(SOURCE) --to revealjs
-	cp $(OUTPUT)/simulation-modeling-lab07-presentation.html .
+	cp $(OUTPUT)/$(FINAL) $(FINAL)
 
-pdf:
-	quarto render $(SOURCE) --to beamer
-	cp $(OUTPUT)/$(FINAL_PDF) $(FINAL_PDF)
+pdf: html
+	"$(CHROME)" --headless=new --disable-gpu --no-pdf-header-footer \
+		--run-all-compositor-stages-before-draw --virtual-time-budget=5000 \
+		--print-to-pdf="$(CURDIR)/$(FINAL_PDF)" \
+		"file://$(CURDIR)/$(FINAL)?print-pdf"
 
 verify:
-	@test -s simulation-modeling-lab07-presentation.html
+	@test -s $(FINAL)
 	@test -s $(FINAL_PDF)
 
 clean:
-	rm -rf $(OUTPUT) .quarto simulation-modeling-lab07-presentation.html simulation-modeling-lab07-presentation.pdf
+	rm -rf $(OUTPUT) .quarto
