@@ -8,8 +8,6 @@
 - Fifteen-point beta scan, 501-state animation, and CSV-only report stage.
 - Four independent parameter studies, executed notebooks, Quarto documents, tests.
 - Russian report and presentation in PDF-ready source formats.
-- Three 1920×1080 recordings: 36:28 execution, 07:43 report, and 08:47
-  presentation review.
 
 ### Fixed
 - Replaced the duplicated scan from the animation example with a real GIF workflow.
