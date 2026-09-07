@@ -1,0 +1,77 @@
+# Число машин и ремонтников в системе Росса
+
+Выполняется факторный план по числу рабочих машин и ремонтников. Для каждого
+сочетания имитационная оценка сопоставляется с решением линейной системы CTMC.
+
+````julia
+using DrWatson
+@quickactivate "EventSystemsStudy"
+ENV["GKSwstype"] = "100"
+include(srcdir("EventSystemsStudy.jl"))
+using .EventSystemsStudy.RepairReserve, .EventSystemsStudy.EvidenceIO
+using DataFrames, Statistics, Plots
+````
+
+## Факторный план
+
+````julia
+machine_counts = [8, 12, 20]
+repairer_counts = [1, 2, 3]
+replications = 40
+comparisons = NamedTuple[]
+replicate_rows = NamedTuple[]
+
+for (case, (required, repairers)) in enumerate(Iterators.product(machine_counts, repairer_counts))
+    for replicate in 1:replications
+        result = run_reserve(; required, spares=3, repairers,
+            failure_mean=100.0, repair_mean=1.0,
+            seed=70_000+1_000case+replicate)
+        s = result.summary
+        push!(replicate_rows, (; case, replicate, required, repairers,
+            failure_time=s.failure_time, busy_area=s.utilization*repairers*s.failure_time,
+            capacity_time=repairers*s.failure_time, queue_area=s.mean_queue*s.failure_time))
+    end
+    sample = DataFrame(filter(row -> row.case == case, replicate_rows))
+    estimate = summarize_replications(sample)
+    exact = reserve_theory(; required, spares=3, repairers,
+        failure_mean=100.0, repair_mean=1.0)
+    push!(comparisons, (; case, required, spares=3, repairers,
+        replications, simulated_time=estimate.mean_time,
+        standard_error=estimate.standard_error, ci_low=estimate.ci_low,
+        ci_high=estimate.ci_high, analytical_time=exact.mean_time,
+        relative_error=abs(estimate.mean_time-exact.mean_time)/exact.mean_time,
+        utilization=estimate.utilization, analytical_utilization=exact.utilization,
+        mean_queue=estimate.mean_queue, analytical_queue=exact.mean_queue))
+end
+comparison = DataFrame(comparisons)
+store_table("repair_capacity_study", "replications.csv", DataFrame(replicate_rows))
+store_table("repair_capacity_study", "factorial_summary.csv", comparison)
+````
+
+## Влияние ремонтной мощности
+
+````julia
+println(comparison[:, [:required, :repairers, :simulated_time,
+    :analytical_time, :relative_error, :utilization, :mean_queue]])
+p_time = plot(; xlabel="число рабочих машин", ylabel="время до отказа",
+    yscale=:log10, title="Время до отказа системы с тремя резервами")
+p_load = plot(; xlabel="число рабочих машин", ylabel="загрузка ремонтника",
+    title="Загрузка ремонтной службы")
+for repairers in repairer_counts
+    rows = comparison[comparison.repairers .== repairers, :]
+    plot!(p_time, rows.required, rows.simulated_time; marker=:circle,
+        label="имитация, r=$repairers")
+    plot!(p_time, rows.required, rows.analytical_time; linestyle=:dash,
+        label="аналитика, r=$repairers")
+    plot!(p_load, rows.required, rows.utilization; marker=:circle,
+        label="r=$repairers")
+end
+figure = plot(p_time, p_load; layout=(1,2), size=(1200,520))
+store_figure("repair_capacity_study", "capacity_comparison.png", figure)
+figure
+````
+
+---
+
+*This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+

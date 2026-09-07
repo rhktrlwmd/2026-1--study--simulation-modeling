@@ -1,0 +1,40 @@
+# # Нагрузочное исследование очереди M/M/c
+#
+# Для девяти устойчивых комбинаций оценивается установившийся режим после
+# отбрасывания разогрева. Расчёт сопоставляется с формулой Эрланга C.
+
+using DrWatson
+@quickactivate "EventSystemsStudy"
+ENV["GKSwstype"] = "100"
+include(srcdir("EventSystemsStudy.jl"))
+using .EventSystemsStudy.QueueFlow, .EventSystemsStudy.EvidenceIO
+using DataFrames, Plots
+
+# ## План эксперимента
+arrival_rates = [0.45, 0.70, 0.90]
+channel_counts = [2, 3, 4]
+clients, warmup = 15_000, 3_000
+rows = NamedTuple[]
+
+for (case, (lambda, c)) in enumerate(Iterators.product(arrival_rates, channel_counts))
+    simulation = run_queue(; clients, channels=c, arrival_rate=lambda,
+        service_rate=0.5, seed=700+case)
+    estimate = queue_indicators(simulation; warmup)
+    theory = erlang_c_indicators(lambda, 0.5, c)
+    push!(rows, (; case, lambda, mu=0.5, c, rho=theory.rho,
+        simulated_Wq=estimate.Wq, theoretical_Wq=theory.Wq,
+        relative_error=abs(estimate.Wq-theory.Wq)/theory.Wq,
+        simulated_Lq=estimate.Lq, theoretical_Lq=theory.Lq,
+        utilization=estimate.utilization, little_error=estimate.little_queue_error))
+end
+summary = DataFrame(rows)
+rename!(summary, :simulated_Wq=>:sim_Wq, :theoretical_Wq=>:theory_Wq,
+    :simulated_Lq=>:sim_Lq, :theoretical_Lq=>:theory_Lq)
+store_table("queue_load_study", "stationary_cases.csv", summary)
+
+# ## Сравнение
+println(summary)
+println("maximum relative Wq error = ", round(maximum(summary.relative_error), digits=4))
+figure = queue_comparison_plot(summary)
+store_figure("queue_load_study", "erlang_c_comparison.png", figure)
+figure
