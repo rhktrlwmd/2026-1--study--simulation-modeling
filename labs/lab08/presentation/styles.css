@@ -115,14 +115,21 @@
   }
 }
 
-/* Explicit text sizes keep the accepted template readable in PDF export. */
-.reveal .slides section p, .reveal .slides section li { font-size: 32px; }
-.reveal .slides section h2 { font-size: 44px; }
-.reveal .slides section.level1 h1 { font-size: 48px; }
-.reveal .slides section.level1 h1::before { font-size: 34px; }
-.reveal .slides section table { font-size: 27px; }
-#title-slide h1.title { font-size: 58px; }
-#title-slide .subtitle { font-size: 37px; }
-#title-slide .quarto-title-authors { font-size: 36px; }
-#title-slide .date { font-size: 30px; }
-.reveal .slide-logo { max-height: 65px !important; }
+/* Course logo sits above the template footer and page counter. */
+.reveal .slide-logo { position: fixed !important; right: 18px !important;
+  bottom: 43px !important; max-height: 60px !important; width: auto !important;
+  margin: 0 !important; z-index: 20 !important; }
+
+/* Reveal creates a separate page counter for each printed slide. */
+html.print-pdf .reveal > .slide-number { display: none !important; }
+html.print-pdf .reveal .pdf-page > .slide-number-pdf {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  display: block !important;
+}
+html.print-pdf .reveal .pdf-page > .slide-number-pdf {
+  background: #3536b8 !important;
+  color: #fff !important;
+}
