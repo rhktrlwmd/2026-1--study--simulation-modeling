@@ -10,7 +10,6 @@ toc-depth: 1
 format:
   revealjs:
     embed-resources: true
-    logo: ../image/brand/university-mark.png
     slide-number: c/t
     transition: fade
     background-transition: none
