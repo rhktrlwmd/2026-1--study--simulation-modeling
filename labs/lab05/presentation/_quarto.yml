@@ -21,6 +21,5 @@ format:
     progress: false
     smaller: true
     theme: simple
-    logo: ../image/brand/university-mark.png
     footer: "Исаева Зарина Исмайилбековна　　　　Имитационное моделирование　　　　2026-09-06"
     css: styles.css

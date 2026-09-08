@@ -1,7 +1,12 @@
 project:
   title: "Лабораторная работа № 6"
   output-dir: "_output"
+
 lang: ru-RU
+number-sections: true
+toc: true
+toc-title: "Содержание"
+toc-depth: 1
 format:
   revealjs:
     embed-resources: true
@@ -10,7 +15,7 @@ format:
     background-transition: none
     width: 1600
     height: 900
-    margin: 0.08
+    margin: 0.09
     center: true
     controls: true
     progress: false
