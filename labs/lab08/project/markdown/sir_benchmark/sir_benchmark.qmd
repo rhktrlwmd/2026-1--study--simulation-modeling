@@ -1,0 +1,37 @@
+# Производительность
+Каждый образец использует новую активированную модель N=10000.
+
+```{julia}
+using DrWatson
+@quickactivate "ContactEpidemics"
+using ContactEpidemics.ContactProcesses
+using ContactEpidemics.StudyTools
+using DataFrames, CSV, Plots, Statistics
+
+
+using BenchmarkTools
+fresh() = activate!(prepare(u0=(9990,10,0)))
+```
+
+Подготовка исключена из времени sir_run, но повторяется для каждого образца.
+
+```{julia}
+trial = @benchmark finish!(model,40.0) setup=(model=fresh()) evals=1 samples=8 seconds=120
+summary = DataFrame(N=[10000],samples=[length(trial)],
+    median_seconds=[median(trial).time/1e9],
+    min_seconds=[minimum(trial).time/1e9],
+    allocated_bytes=[median(trial).memory],
+    allocations=[median(trial).allocs])
+save_table("benchmark",summary)
+display(trial)
+display(summary)
+figure = scatter(1:length(trial),trial.times/1e9,
+    xlabel="Sample",ylabel="Seconds",label="fresh population",title="N=10000")
+savefig(figure,imagefile("benchmark"))
+display(plot(figure; size=(780,420)))
+```
+
+---
+
+*This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+

@@ -1,0 +1,3 @@
+sigma,peak,time_peak,R_T,cases,I_T,vaccinated,population,balance,peak_E
+Inf,175,21.416150511665272,815,817,2,0,1000,true,0
+0.5,116,34.50908412222263,798,798,0,0,1000,true,74

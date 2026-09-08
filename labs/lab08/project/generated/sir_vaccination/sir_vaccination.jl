@@ -1,0 +1,29 @@
+using DrWatson
+@quickactivate "ContactEpidemics"
+using ContactEpidemics.ContactProcesses
+using ContactEpidemics.StudyTools
+using DataFrames, CSV, Plots, Statistics
+
+
+rows = NamedTuple[]
+for fraction in [0.0,0.25,0.5,0.65,0.8]
+    cfg = Settings(vaccination_time=0.0,vaccination_fraction=fraction)
+    result = ensemble(cfg)
+    for row in eachrow(result.metrics)
+        push!(rows,(;fraction,NamedTuple(row)...))
+    end
+end
+metrics = DataFrame(rows)
+save_table("vaccination_runs",metrics)
+summary = combine(groupby(metrics,:fraction),:peak=>mean=>:mean_peak,
+    :cases=>mean=>:mean_cases,:vaccinated=>mean=>:vaccinated,
+    :I_T=>mean=>:mean_I_T)
+save_table("vaccination_summary",summary)
+display(summary)
+figure = plot(summary.fraction,summary.mean_cases,marker=:circle,
+    xlabel="Vaccinated fraction of S(0)",ylabel="Cumulative infections",
+    label="20 replicates",title="Vaccination at t=0")
+savefig(figure,imagefile("vaccination"))
+display(plot(figure; size=(780,420)))
+
+# This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl

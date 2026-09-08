@@ -1,0 +1,32 @@
+### Литературный исходник
+Этот сценарий не запускает модель: входом служит базовый CSV.
+
+```julia
+using DrWatson
+@quickactivate "ContactEpidemics"
+using ContactEpidemics.ContactProcesses
+using ContactEpidemics.StudyTools
+using DataFrames, CSV, Plots, Statistics
+
+
+folder = datadir("sims")
+files = sort(filter(name -> startswith(name,"sir_N1000_"),readdir(folder)))
+isempty(files) && error("Run sir_des.jl first")
+data = CSV.read(joinpath(folder,first(files)),DataFrame)
+@assert all(data.S .+ data.E .+ data.I .+ data.R .== 1000)
+k = argmax(data.I)
+summary = DataFrame(source=[first(files)],rows=[nrow(data)],
+    peak=[data.I[k]],time_peak=[data.t[k]],R_T=[last(data.R)])
+save_table("csv_review",summary)
+display(summary)
+figure = plot(data.t,Matrix(data[:,[:S,:I,:R]]),
+    label=["S" "I" "R"],xlabel="Time",ylabel="People",
+    seriestype=:steppost,title="Saved event ledger")
+savefig(figure,imagefile("csv-review"))
+display(plot(figure; size=(780,420)))
+```
+
+---
+
+*This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
+

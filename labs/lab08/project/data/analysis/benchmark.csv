@@ -1,0 +1,2 @@
+N,samples,median_seconds,min_seconds,allocated_bytes,allocations
+10000,8,2.097665501,1.995145001,1215293328,43239718

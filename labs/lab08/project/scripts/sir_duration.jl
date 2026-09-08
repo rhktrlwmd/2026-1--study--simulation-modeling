@@ -1,0 +1,23 @@
+# # Длительность инфекции
+# Одинаковый seed для экспоненциальной и фиксированной болезни.
+using DrWatson
+@quickactivate "ContactEpidemics"
+using ContactEpidemics.ContactProcesses
+using ContactEpidemics.StudyTools
+using DataFrames, CSV, Plots, Statistics
+
+
+rows = NamedTuple[]
+figure = plot(xlabel="Time",ylabel="I",title="Recovery duration")
+for fixed in (false,true)
+    m = simulate(config=Settings(;fixed),T=80.0)
+    save_run(m;label="duration_$(fixed)",T=80.0)
+    d = table(m)
+    plot!(figure,d.t,d.I,label=fixed ? "fixed 4" : "exponential mean 4")
+    push!(rows,(;fixed,run_metrics(m)...))
+end
+result = DataFrame(rows)
+save_table("duration",result)
+display(result)
+savefig(figure,imagefile("duration"))
+display(plot(figure; size=(780,420)))
