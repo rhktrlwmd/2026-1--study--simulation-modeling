@@ -29,4 +29,3 @@ display(plot(figure; size=(780,420)))
 ---
 
 *This page was generated using [Literate.jl](https://github.com/fredrikekre/Literate.jl).*
-
